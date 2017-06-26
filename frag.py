@@ -6,8 +6,8 @@ import threading
 import sys
 import os
 import time
-import traceback
-import progressBar
+import seqdown
+#import progressBar
 try:
     import http.client as hlib
 except:
@@ -22,6 +22,17 @@ frags=5
 childList=[]
 expected=[0 for i in range(frags)]
 fragsize=[0 for i in range(frags)]
+
+def printProgress(percent,width=40):
+    chars=percent*width/100;
+    print('[',end='')
+    print('N'*int(chars),end='');
+    print('-'*(width-int(chars)),end='')
+    print(']',end='')
+    print(" "+str(percent)+"%",end='')
+    print('\r',end='')
+
+    
 def getFrags(size):
     global frags
     assert (size>0),"Your video kinda sucks"
@@ -92,7 +103,8 @@ def catAll():
         tempcontent=fi.read()
         fp.write(tempcontent)
         fi.close()
-        progressBar.printProgress(100*(i+1)/frags)
+        #progressBar.printProgress(100*(i+1)/frags)
+        printProgress(100*(i+1)/frags)
     fp.close()
     print();
     cleanYourMess()
@@ -102,7 +114,7 @@ def cleanYourMess():
     global frags
     for i in range(frags):
         os.remove(title+".frag"+str(i))
-    print("mess has been cleaned Sir!");
+    print("Deleted the fragments!");
     
 def checklen():
     global title
@@ -115,7 +127,8 @@ def checklen():
         for i in range(frags):
             percent.append(int(fragsize[i]*100/expected[i]))
         avg=sum(percent)/frags
-        progressBar.printProgress(avg)
+        #progressBar.printProgress(avg)
+        printProgress(avg)
         if percent==hundred:
             break
         time.sleep(1)
@@ -137,7 +150,6 @@ def downloadAll(url):
     childList.append(check)
     for t in childList:
         t.join()
-    time.sleep(0.5)
     print();
     print("Done Downloading")
     print("Starting to merge %d fragments"%(frags))
@@ -162,8 +174,13 @@ except:
 
 if "youtube" in url or "youtu.be" in url:
     url=getUrl(url,getmusic)            #use pafy to get a url for video
-    print(url+' is to be downloaded');
+    #print(url+' is to be downloaded');
 else:
     l=url.split('/')
     title=l[-1];
-downloadAll(url);
+print("fragments: "+str(frags))
+try:
+    downloadAll(url);
+except:
+    print("Coud not fragment the file.Rolling back to sequential download")
+    seqdown.downloadOldSchool(url,title)
