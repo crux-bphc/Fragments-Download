@@ -163,9 +163,10 @@ MIT
 ### BITS Pilani Hyderabad Campus
 
 [CRUx - The computing and programming club]: <https://github.com/CRUx-BPHC>
+[BITS Pilani Hyderabad Campus]: <http://www.bits-pilani.ac.in/hyderabad/>
 
 
-[![N|Solid](https://scontent.fbom1-1.fna.fbcdn.net/v/t1.0-1/p200x200/17904452_1491990900819437_3846562565023385004_n.png?oh=4a26af21c3764e36319197a532de47c7&oe=59DFB8EC)](https://github.com/orgs/CRUx-BPHC/dashboard)
+[![N|Solid](https://scontent.fbom1-1.fna.fbcdn.net/v/t1.0-1/p200x200/17904452_1491990900819437_3846562565023385004_n.png?oh=4a26af21c3764e36319197a532de47c7&oe=59DFB8EC)](https://www.facebook.com/cruxbphc/?ref=br_rs)
 
 Members :
 * [Neel Bhawsar](https://github.com/neel123456)
