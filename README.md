@@ -10,4 +10,4 @@
   - supports a feature of pausing and resuming the downloads any number of times 
   - consistently writes the files to hard drive from from RAM hence allowing machines with low RAM cpacity to download lage sized files 
  - written completely in python hence can be used in linux, mac and windows 
-  - Drag and drop images (requires your Dropbox account be linked)
+  - has very little dependencies on python libraries
