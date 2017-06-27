@@ -160,7 +160,7 @@ MIT
 ### Created By    
 ## [CRUx - The computing and programming club] 
 #### of
-### BITS Pilani Hyderabad Campus
+### [BITS Pilani Hyderabad Campus]
 
 [CRUx - The computing and programming club]: <https://github.com/CRUx-BPHC>
 [BITS Pilani Hyderabad Campus]: <http://www.bits-pilani.ac.in/hyderabad/>
