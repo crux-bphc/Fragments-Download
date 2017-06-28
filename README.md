@@ -44,49 +44,58 @@ $ sudo pip install seqdown
 
 ## Usage 
 
-Firstly go the folder which contains the all the code.Then for almost any link this will be the standard way of downloading
+Firstly go the folder which contains the all the code.
+
+[![N|Solid](http://i.imgur.com/7o0WvmT.png)]
+
+Change the the no of fragments you want by altering the variable frag in line 21 of downloader.py. Recomended no of fragments are between 4 to 32. Default is set to 5.Then for almost any link this will be the standard way of downloading.
+
+
 ```sh
-$ python3 downloader.py url_which_you_want_to_download
+$ python3 downloader.py url_you_want_to_download
+```
+For videos just copy the youtube url and paste it and if you want the audio of that paticular video just add m after the code.For starting a single file download without fragmenting the file press ctrl + c and for stopping/ pausing the downloads press ctrl + c again 
+
+## Example 
+
+Downloading a video from youtube.com
+
+[![N|Solid](http://i.imgur.com/9g6RA0I.png)]
+
+default number of fragments are 5 which are created in the folder containinf the script 
+
+[![N|Solid](http://i.imgur.com/WHJWmJu.png)]
+
+pressing ctrl + c will initiate a single file download 
+
+[![N|Solid](http://i.imgur.com/620axs4.png)]
+
+Pressing ctrl + c will stop the download. Runnig the the command again will start the download. In the image below, the download is starting from 22% because the script already considers the downloded portion completed and shows percentage completion the rest of the file
+
+[![N|Solid](http://i.imgur.com/9g6RA0I.png)]
+
+
+Downloading a mp3 file from youtube 
+
+```sh
+$ python3 downloader.py url_you_want_to_download m
 ```
 
+[![N|Solid](http://i.imgur.com/3ltpxKP.png?1)]
 
-
-
+The fragments will be deleted after the download is finished.
 
 
 License
 ----
+MIT License
 
-MIT
-
-
-**Free Software, Hell Yeah!**
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
+Copyright (c) 2017 Crux
 
 
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
 
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
 ### Created By    
-## [CRUx - The computing and programming club] 
+## [CRUx - The Computing and Programming Club] 
 
 
 [CRUx - The computing and programming club]: <https://github.com/CRUx-BPHC>
