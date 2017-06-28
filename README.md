@@ -46,7 +46,7 @@ $ sudo pip install seqdown
 
 Firstly go the folder which contains the all the code.
 
-[![N|Solid](http://i.imgur.com/7o0WvmT.png)]
+![](http://i.imgur.com/7o0WvmT.png)
 
 Change the the no of fragments you want by altering the variable frag in line 21 of downloader.py. Recomended no of fragments are between 4 to 32. Default is set to 5.Then for almost any link this will be the standard way of downloading.
 
@@ -60,19 +60,19 @@ For videos just copy the youtube url and paste it and if you want the audio of t
 
 Downloading a video from youtube.com
 
-[![N|Solid](http://i.imgur.com/9g6RA0I.png)]
+![](http://i.imgur.com/9g6RA0I.png)
 
 default number of fragments are 5 which are created in the folder containinf the script 
 
-[![N|Solid](http://i.imgur.com/WHJWmJu.png)]
+![](http://i.imgur.com/WHJWmJu.png)
 
 pressing ctrl + c will initiate a single file download 
 
-[![N|Solid](http://i.imgur.com/620axs4.png)]
+![](http://i.imgur.com/620axs4.png)
 
 Pressing ctrl + c will stop the download. Runnig the the command again will start the download. In the image below, the download is starting from 22% because the script already considers the downloded portion completed and shows percentage completion the rest of the file
 
-[![N|Solid](http://i.imgur.com/9g6RA0I.png)]
+![](http://i.imgur.com/9g6RA0I.png)
 
 
 Downloading a mp3 file from youtube 
@@ -81,7 +81,7 @@ Downloading a mp3 file from youtube
 $ python3 downloader.py url_you_want_to_download m
 ```
 
-[![N|Solid](http://i.imgur.com/3ltpxKP.png?1)]
+![](http://i.imgur.com/3ltpxKP.png?1)
 
 The fragments will be deleted after the download is finished.
 
@@ -103,9 +103,9 @@ Copyright (c) 2017 Crux
 
 #### of
 ### [BITS Pilani Hyderabad Campus]
-[![N|Solid](https://scontent.fbom1-1.fna.fbcdn.net/v/t1.0-1/p200x200/17904452_1491990900819437_3846562565023385004_n.png?oh=4a26af21c3764e36319197a532de47c7&oe=59DFB8EC)](https://www.facebook.com/cruxbphc/?ref=br_rs)
+[![](https://scontent.fbom1-1.fna.fbcdn.net/v/t1.0-1/p200x200/17904452_1491990900819437_3846562565023385004_n.png?oh=4a26af21c3764e36319197a532de47c7&oe=59DFB8EC)](https://www.facebook.com/cruxbphc/?ref=br_rs)
 
-Members :
+Members involved in the project :
 * [Neel Bhawsar](https://github.com/neel123456)
 * [Himanshu Gupta](https://github.com/him1411)
 
