@@ -62,7 +62,7 @@ Downloading a video from youtube.com
 
 ![](http://i.imgur.com/9g6RA0I.png)
 
-default number of fragments are 5 which are created in the folder containinf the script 
+default number of fragments are 5 which are created in the folder containing the script 
 
 ![](http://i.imgur.com/WHJWmJu.png)
 
