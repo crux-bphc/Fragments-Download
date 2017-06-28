@@ -7,7 +7,7 @@ import sys
 import os
 import time
 import seqdown
-import progressBar
+#import progressBar
 try:
     import http.client as hlib
 except:
@@ -35,8 +35,8 @@ def printProgress(percent,width=40):
     
 def getFrags(size):
     global frags
-    assert (size>0),"Your video size is too small"
-    assert (frags>1),"please try some other video link"
+    assert (size>0),"Your video kinda sucks"
+    assert (frags>1),"Alri8 you're an idiot"
     l=[]
     l.append((0,int(size*(float(1)/frags))));
     for i in range(1,frags):
