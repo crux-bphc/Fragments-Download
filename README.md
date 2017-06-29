@@ -35,11 +35,7 @@ Install the dependencies and devDependencies and open terminal.
 
 ```sh
 $ sudo pip install pafy
-$ sudo pip install urllib
-$ sudo pip install requests
-$ sudo pip install threading 
-$ sudo pip install progressBar
-$ sudo pip install seqdown
+$ sudo pip install youtube-dl
 ```
 
 ## Usage 
@@ -106,6 +102,6 @@ Copyright (c) 2017 Crux
 [![](https://scontent.fbom1-1.fna.fbcdn.net/v/t1.0-1/p200x200/17904452_1491990900819437_3846562565023385004_n.png?oh=4a26af21c3764e36319197a532de47c7&oe=59DFB8EC)](https://www.facebook.com/cruxbphc/?ref=br_rs)
 
 Members involved in the project :
-* [Neel Bhawsar](https://github.com/neel123456)
+* [Neel Bhavsar](https://github.com/neel123456)
 * [Himanshu Gupta](https://github.com/him1411)
 
