@@ -54,10 +54,10 @@ class downloadUrl(object):
             else:
                 self.byteAllow=False
         elif response.status>300 and response.status<309:
-            print(str(response.status_code)+" "+response.reason)
+            print(str(response.status)+" "+response.reason)
             print("Trying to follow redirection to %s"%(response.headers['Location']))
             self.url=response.headers['Location']
-            self.sendHead()
+            await self.sendHead()
         else:
             print(str(response.status_code)+"received"+response.reason)
             self.byteAllow=False
@@ -94,7 +94,7 @@ class downloadUrl(object):
             print("Download for %d fragment will resume from %d" % (num,start))
         sendheaders={'Range':'bytes=%d-%d'%(start,end),'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'}
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.url, headers=sendheaders) as resp:
+            async with session.get(self.url, headers=sendheaders) as resp:
                 print("starting download for frag %d\n" % (num))
                 chunk=16*1024
                 fp=open(self.title+".frag"+str(num),"ab")
@@ -117,6 +117,9 @@ class downloadUrl(object):
         ##print("Debug: "+str(self.fraglist))
         
     async def downloadAllFrags(self):
+        if self.length == None:
+            await self.sendHead()
+            self.setDefaultFraglist()
         if self.length==False or self.byteAllow==False:
             print("Can not download by fragments.")
             print("Falling back to old download style.")

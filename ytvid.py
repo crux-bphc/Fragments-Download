@@ -1,4 +1,5 @@
 import pafy
+import asyncio, aiohttp
 from downloaderOOP import *
 class ytvideo(object):
     def __init__(self,url):
@@ -22,7 +23,7 @@ class ytvideo(object):
     def setStream(self,streamNumber):
         self.streamNumber=streamNumber
 
-    def download(self,music=False):
+    async def download(self,music=False):
         if self.streamNumber:
             downurl=self.obj.allstreams[self.streamNumber].url
         else:
@@ -32,7 +33,12 @@ class ytvideo(object):
                 download=downloadUrl(downstream.url,downstream.title+"."+downstream.extension)
             else:
                 download=downloadUrl(downstream.url,downstream.title+"."+downstream.extension)
-        download.sendHead()
+        await download.sendHead()
         download.setDefaultFraglist()
-        download.downloadAllFrags()
+        await download.downloadAllFrags()
+
+if __name__ == '__main__':
+    y = ytvideo('https://www.youtube.com/watch?v=QwievZ1Tx-8')
+    event = asyncio.get_event_loop()
+    event.run_until_complete(y.download())
   

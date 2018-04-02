@@ -32,7 +32,8 @@ class ytlist(object):
         for i in range(start,end):
             print("ytlist:: Downloading %d of %d " % (i+1,len(self.videos)))
             current=ytvideo(self.videos[i])
-            current.download(music)
+            event = asyncio.get_event_loop()
+            event.run_until_complete(current.download(music))
             print("ytlist:: Completed downloading %d" %(i+1))
 
     
