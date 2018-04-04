@@ -1,44 +1,49 @@
 import pafy
-import asyncio, aiohttp
+import asyncio
 from downloaderOOP import *
+
+
 class ytvideo(object):
-    def __init__(self,url):
-        self.baseurl=url
-        self.streamNumber=None   ## None will default to best available ##
+    def __init__(self, url, path):
+        self.baseurl = url
+        self.path = path
+        self.streamNumber = None   # None will default to best available
         try:
-            self.obj=pafy.new(self.baseurl)
+            self.obj = pafy.new(self.baseurl)
         except:
-            print("Error getting downloadable urls.Check your url and internet connection")
+            print(
+                "Error getting downloadable urls.Check your url and internet connection")
             exit(1)
-        self.title=self.obj.title+"."+self.obj.getbest().extension
+        self.title = self.obj.title + "." + self.obj.getbest().extension
         print(self.title)
-        
+
     def __str__(self):
         print(self.obj)
 
     def printStreams(self):
         for i in range(len(self.obj.allstreams)):
-            print("%d "%(i)+str(self.obj.allstreams[i]))
+            print("%d " % (i) + str(self.obj.allstreams[i]))
 
-    def setStream(self,streamNumber):
-        self.streamNumber=streamNumber
+    def setStream(self, streamNumber):
+        self.streamNumber = streamNumber
 
-    async def download(self,music=False):
+    async def download(self, music=False):
         if self.streamNumber:
-            downurl=self.obj.allstreams[self.streamNumber].url
+            downlink = self.obj.allstreams[self.streamNumber]
+            downloader = downloadUrl(
+                downlink.url, self.path, downlink.title + "." + downlink.extension)
         else:
-            downstream=self.obj.getbest()
+            downlink = self.obj.getbest()
             if music:
-                downstream=self.obj.getbestaudio()
-                download=downloadUrl(downstream.url,downstream.title+"."+downstream.extension)
+                downlink = self.obj.getbestaudio()
+                downloader = downloadUrl(
+                    downlink.url, self.path, downlink.title + "." + downlink.extension)
             else:
-                download=downloadUrl(downstream.url,downstream.title+"."+downstream.extension)
-        await download.sendHead()
-        download.setDefaultFraglist()
-        await download.downloadAllFrags()
+                downloader = downloadUrl(
+                    downlink.url, self.path, downlink.title + "." + downlink.extension)
+        await downloader.sendHead()
+        downloader.setDefaultFraglist()
+        await downloader.downloadAllFrags()
 
-if __name__ == '__main__':
-    y = ytvideo('https://www.youtube.com/watch?v=QwievZ1Tx-8')
-    event = asyncio.get_event_loop()
-    event.run_until_complete(y.download())
-  
+    def sendStreams(self):
+        return self.obj.allstreams
