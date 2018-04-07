@@ -141,7 +141,9 @@ class downloadUrl(object):
             return
         else:
             self.setDefaultFraglist()
-            if (os.access((self.path + self.title), os.F_OK) and (os.stat((self.path + self.title)).st_size * 1024) >= self.length):
+            if (os.access((self.path + self.title), os.F_OK) and
+                    (os.stat((self.path +
+                              self.title)).st_size * 1024) >= self.length):
                 print("looks like file is downloaded already")
                 return
             print("downloading "+'%.2f' % (self.length/(1024*1024.0))+" MB")

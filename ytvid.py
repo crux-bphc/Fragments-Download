@@ -12,7 +12,7 @@ class ytvideo(object):
             self.obj = pafy.new(self.baseurl)
         except:
             print(
-                "Error getting downloadable urls.Check your url and internet connection")
+                "Error getting urls.Check your url and internet connection")
             exit(1)
         self.title = self.obj.title + "." + self.obj.getbest().extension
         print(self.title)
@@ -31,16 +31,19 @@ class ytvideo(object):
         if self.streamNumber:
             downlink = self.obj.allstreams[self.streamNumber]
             downloader = downloadUrl(
-                downlink.url, self.path, downlink.title + "." + downlink.extension)
+                downlink.url, self.path,
+                downlink.title + "." + downlink.extension)
         else:
             downlink = self.obj.getbest()
             if music:
                 downlink = self.obj.getbestaudio()
                 downloader = downloadUrl(
-                    downlink.url, self.path, downlink.title + "." + downlink.extension)
+                    downlink.url, self.path,
+                    downlink.title + "." + downlink.extension)
             else:
                 downloader = downloadUrl(
-                    downlink.url, self.path, downlink.title + "." + downlink.extension)
+                    downlink.url, self.path,
+                    downlink.title + "." + downlink.extension)
         await downloader.sendHead()
         downloader.setDefaultFraglist()
         await downloader.downloadAllFrags()

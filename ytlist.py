@@ -12,4 +12,3 @@ class ytlist(object):
         for i in range(len(self.obj['items'])):
             self.videos.append(self.obj['items'][i]['pafy'].getbest().url)
         return self.videos
-
