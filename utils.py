@@ -3,7 +3,7 @@ import sys
 import time
 
 
-def printProgressBar(percent, width=40, speed=None):
+def printprogressbar(percent, width=40, speed=None):
     size = os.get_terminal_size()
     width = size[0]-25
     chars = percent*width/100.0
@@ -16,28 +16,28 @@ def printProgressBar(percent, width=40, speed=None):
     print('\r', end='')
 
 
-def printProgress(amount):
+def printprogress(amount):
     print("Downloaded "+str(amount)+" bytes"+"\r", end='')
 
 
-def checkSize(filename, size=None):
+def checksize(filename, size=None):
     if size:
         while True:
             sz = os.stat(filename).st_size
-            printProgressBar(sz*100.0/size)
+            printprogressbar(sz*100.0/size)
             if sz == size:
                 break
             time.sleep(1)
     else:
         while True:
             sz = os.stat(filename).st_size
-            printProgress(sz)
+            printprogress(sz)
             if sz == size:
                 break
             time.sleep(1)
 
 
-def fragProgress(title, num, expected):
+def fragprogress(title, num, expected):
     hundred = [100 for i in range(num)]
     prevTotal = 0
     thisTotal = 0
@@ -52,7 +52,7 @@ def fragProgress(title, num, expected):
         time.sleep(0.1)
 
 
-def catAll(title, num, path):
+def catall(title, num, path):
     file = path + title
     fp = open(file, "wb")
     for i in range(num):
@@ -66,8 +66,15 @@ def catAll(title, num, path):
         os.remove(file + ".frag" + str(i))
     print("Removed the fragments!")
 
+def clearfragments(title, num, path):
+    for i in range(num):
+        try:
+            os.remove(path + title + ".frag" + str(i))
+        except:
+            pass
+    print("Removed the old fragments") 
 
-def removeSlash(title):
+def removeslash(title):
     try:
         return title.replace("/", " ")
     except:

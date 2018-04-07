@@ -16,12 +16,14 @@ class AppInterface(QWidget):
         self.setGeometry(600, 600, 300, 300)
         self.setWindowTitle('Downloader')
         self.box = QVBoxLayout()
-        self.startUI()
         self.frags = 8
         self.url = None
         self.downloader = None
+        self.path = ""
+        self.isTube = False
+        self.start_ui()
 
-    def startUI(self):
+    def start_ui(self):
         try:
             self.l1.close()
             self.b1.close()
@@ -34,11 +36,11 @@ class AppInterface(QWidget):
         self.l3 = QLabel()
         self.b1.clicked.connect(self.select_path)
         self.b2 = QPushButton("Download")
-        self.b2.clicked.connect(self.preDownload)
+        self.b2.clicked.connect(self.predownload)
         self.combo = QComboBox()
         for i in range(2, 33):
             self.combo.addItem(str(i))
-        self.combo.currentIndexChanged.connect(self.Changed_Selection)
+        self.combo.currentIndexChanged.connect(self.changed_selection)
         self.combo.setCurrentIndex(6)
         self.box.addWidget(self.l1)
         self.box.addWidget(self.t1)
@@ -53,7 +55,6 @@ class AppInterface(QWidget):
         path_select = QFileDialog()
         path_select.setFileMode(QFileDialog.Directory)
         file_path = None
-        self.path = ""
         if path_select.exec_():
             file_path = path_select.selectedFiles()
         if file_path:
@@ -61,13 +62,14 @@ class AppInterface(QWidget):
             self.path = self.path + "/"
             self.l3.setText(self.path)
 
-    def Changed_Selection(self, i):
+    def changed_selection(self, i):
         self.frags = int(i)+2
 
-    def preDownload(self):
+    def predownload(self):
         if len(self.t1.text()) > 1:
             self.url = self.t1.text()
             if "youtube" in self.url or "youtu.be" in self.url:
+                self.isTube = True
                 self.l1.close()
                 self.l2.close()
                 self.l3.close()
@@ -77,20 +79,20 @@ class AppInterface(QWidget):
                 self.combo.close()
                 if 'list' in self.url:
                     try:
-                        ylist = ytlist(self.url)
-                        videolist = ylist.populateVideoList()
+                        ylist = YtList(self.url)
+                        videolist = ylist.populatevideolist()
                         print(videolist)
                         for i in videolist:
                             self.url = i
-                            self.startDownload()
+                            self.startdownload()
                     except:
                         self.l1 = QLabel("There was an error.")
                         self.b1 = QPushButton("Back")
-                        self.b1.clicked.connect(self.startUI)
+                        self.b1.clicked.connect(self.start_ui)
                         self.box.addWidget(self.l1)
                         self.box.addWidget(self.b1)
                 else:
-                    self.YoutubeUI()
+                    self.youtube_ui()
             else:
                 self.l1.close()
                 self.l2.close()
@@ -99,40 +101,48 @@ class AppInterface(QWidget):
                 self.b2.close()
                 self.t1.close()
                 self.combo.close()
-                self.downloader = downloadUrl(self.url, self.path)
-                self.startDownload()
+                self.downloader = DownloadUrl(self.url, self.path)
+                self.startdownload()
 
-    def YoutubeStream(self, i):
-        self.downloader.setStream(i)
+    def youtubestream(self, i):
+        self.downloader.setstream(i)
 
-    def YoutubeUI(self):
+    def youtube_ui(self):
         self.label = QLabel("Select your preferred file type")
         self.cbox = QComboBox()
-        self.downloader = ytvideo(self.url, self.path)
-        streams = self.downloader.sendStreams()
+        self.downloader = YtVideo(self.url, self.path)
+        streams = self.downloader.sendstreams()
         for i in streams:
             self.cbox.addItem(str(i))
-        self.cbox.currentIndexChanged.connect(self.YoutubeStream)
+        self.cbox.currentIndexChanged.connect(self.youtubestream)
         self.b = QPushButton("Download!")
-        self.b.clicked.connect(self.startDownload)
+        self.b.clicked.connect(self.startdownload)
         self.box.addWidget(self.label)
         self.box.addWidget(self.cbox)
         self.box.addWidget(self.b)
 
-    def startDownload(self):
+    def startdownload(self):
         try:
             self.label.close()
             self.cbox.close()
             self.b.close()
         except:
             pass
-        self.label = QLabel("Your download has started..")
-        self.box.addWidget(self.label)
+        self.l1 = QLabel("Your download is complete")
+        self.box.addWidget(self.l1)
+        self.b1 = QPushButton("Back")
+        self.b1.clicked.connect(self.start_ui)
+        self.box.addWidget(self.b1)
+        self.downloader.setfrags(self.frags)
         try:
-            event = asyncio.get_event_loop()
-            event.run_until_complete(self.downloader.download())
+            if self.isTube is true:
+                event = asyncio.get_event_loop()
+                event.run_until_complete(self.downloader.download())
+            else:
+                event = asyncio.get_event_loop()
+                event.run_until_complete(self.downloader.downloadallfrags())
         except:
-            self.label.setText(
+            self.l1.setText(
                 "There was a network error. Please try again later")
 
 

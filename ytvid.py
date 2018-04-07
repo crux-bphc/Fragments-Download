@@ -3,11 +3,12 @@ import asyncio
 from downloaderOOP import *
 
 
-class ytvideo(object):
+class YtVideo(object):
     def __init__(self, url, path):
         self.baseurl = url
         self.path = path
-        self.streamNumber = None   # None will default to best available
+        self.frags = 8
+        self.streamnumber = None   # None will default to best available
         try:
             self.obj = pafy.new(self.baseurl)
         except:
@@ -20,33 +21,37 @@ class ytvideo(object):
     def __str__(self):
         print(self.obj)
 
-    def printStreams(self):
+    def printstreams(self):
         for i in range(len(self.obj.allstreams)):
             print("%d " % (i) + str(self.obj.allstreams[i]))
 
-    def setStream(self, streamNumber):
-        self.streamNumber = streamNumber
+    def setstream(self, streamNumber):
+        self.streamnumber = streamNumber
+
+    def setfrags(self, frags):
+        self.frags = frags
 
     async def download(self, music=False):
-        if self.streamNumber:
-            downlink = self.obj.allstreams[self.streamNumber]
-            downloader = downloadUrl(
+        if self.streamnumber:
+            downlink = self.obj.allstreams[self.streamnumber]
+            downloader = DownloadUrl(
                 downlink.url, self.path,
                 downlink.title + "." + downlink.extension)
         else:
             downlink = self.obj.getbest()
             if music:
                 downlink = self.obj.getbestaudio()
-                downloader = downloadUrl(
+                downloader = DownloadUrl(
                     downlink.url, self.path,
                     downlink.title + "." + downlink.extension)
             else:
-                downloader = downloadUrl(
+                downloader = DownloadUrl(
                     downlink.url, self.path,
                     downlink.title + "." + downlink.extension)
-        await downloader.sendHead()
-        downloader.setDefaultFraglist()
-        await downloader.downloadAllFrags()
+        downloader.setfrags(self.frags)
+        await downloader.sendhead()
+        downloader.setdefaultfraglist()
+        await downloader.downloadallfrags()
 
-    def sendStreams(self):
+    def sendstreams(self):
         return self.obj.allstreams

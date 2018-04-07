@@ -8,21 +8,21 @@ import time
 import utils
 
 
-class downloadUrl(object):
+class DownloadUrl(object):
     def __init__(self, url, path, title=None):
         self.url = url
         self.byteAllow = None
         self.headers = None
         self.path = path
         self.frags = 8
-        self.title = utils.removeSlash(title)
+        self.title = utils.removeslash(title)
         self.length = None
         self.done = False
         self.percent = None
         self.session = None
         self.fraglist = None
-        self.fragsize = [-1 for i in range(self.frags)]
-        self.donesize = [0 for i in range(self.frags)]
+        self.fragsize = None
+        self.donesize = None
         if not self.title:
             self.title = url.split('/')[-1]
             print("title set to "+self.title)
@@ -31,16 +31,13 @@ class downloadUrl(object):
         else:
             self.isTube = False
 
-    def setFrags(self, frags):
-        if frags < 2 or frags > 32:
-            print("WARNING: fragments must be between 2 to 32")
-
+    def setfrags(self, frags):
         self.frags = frags
 
     def __str__(self):
         return str("url: "+self.url)
 
-    async def sendHead(self):
+    async def sendhead(self):
         print("sending Head request")
         async with aiohttp.ClientSession() as self.session:
             async with self.session.head(self.url) as response:
@@ -62,14 +59,14 @@ class downloadUrl(object):
             print("Trying to follow redirection to %s" %
                   (response.headers['Location']))
             self.url = response.headers['Location']
-            await self.sendHead()
+            await self.sendhead()
         else:
             print(str(response.status_code)+"received"+response.reason)
             self.byteAllow = False
             self.headers = response.headers
             self.length = False
 
-    async def downloadOld(self):
+    async def downloadold(self):
         chunk = 16*1024  # Chunk size = 1 kilobyte ###
         # Prepare request
         sendheaders = {
@@ -91,7 +88,7 @@ class downloadUrl(object):
         print()
         print("done!")
 
-    async def downloadFrag(self, start, end, num):
+    async def downloadfrag(self, start, end, num):
         fname = self.path + self.title + ".frag" + str(num)
         self.fragsize[num] = end - start + 1
         if os.access(fname, os.F_OK):
@@ -120,39 +117,43 @@ class downloadUrl(object):
                 fp.close()
                 print("finished download for frag %d\n" % (num))
 
-    def setDefaultFraglist(self):
+    def setdefaultfraglist(self):
         assert (int(self.length) > 0), "Your download file kinda sucks"
         assert (self.frags > 1), "Alri8 you're an idiot. :p"
+        print("Frags : %d" % self.frags)
         self.fraglist = []
         self.fraglist.append((0, int((self.length-1)*(float(1)/self.frags))))
         for i in range(1, self.frags):
             self.fraglist.append(
                 (self.fraglist[-1][1]+1,
                  int((self.length-1)*(float(i+1)/self.frags))))
+        print(self.fraglist)
 
-    async def downloadAllFrags(self):
+    async def downloadallfrags(self):
         if self.length is None:
-            await self.sendHead()
-            self.setDefaultFraglist()
+            await self.sendhead()
+            self.setdefaultfraglist()
         if self.length is False or self.byteAllow is False:
             print("Can not download by fragments.")
             print("Falling back to old download style.")
-            self.downloadOld()
+            self.downloadold()
             return
         else:
-            self.setDefaultFraglist()
+            self.setdefaultfraglist()
             if (os.access((self.path + self.title), os.F_OK) and
                     (os.stat((self.path +
                               self.title)).st_size * 1024) >= self.length):
                 print("looks like file is downloaded already")
                 return
             print("downloading "+'%.2f' % (self.length/(1024*1024.0))+" MB")
-            threadlist = [self.downloadFrag(
+            self.fragsize = [-1 for i in range(self.frags)]
+            self.donesize = [0 for i in range(self.frags)]
+            threadlist = [self.downloadfrag(
                 self.fraglist[i][0], self.fraglist[i][1], i)
                           for i in range(self.frags)]
             await asyncio.gather(*threadlist)
             print()
             print("done downloading")
             print("Starting to merge %d files" % (self.frags))
-            utils.catAll(self.title, self.frags, self.path)
+            utils.catall(self.title, self.frags, self.path)
             print()
