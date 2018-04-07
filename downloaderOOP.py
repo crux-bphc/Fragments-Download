@@ -38,11 +38,11 @@ class DownloadUrl(object):
         return str("url: "+self.url)
 
     async def sendhead(self):
+        # Send Head request
         print("sending Head request")
         async with aiohttp.ClientSession() as self.session:
             async with self.session.head(self.url) as response:
                 pass
-        print(response)
         if response.status == 200 and 'Content-Length' in response.headers:
             print("OK 200")
             self.headers = response.headers
@@ -67,7 +67,7 @@ class DownloadUrl(object):
             self.length = False
 
     async def downloadold(self):
-        chunk = 16*1024  # Chunk size = 1 kilobyte ###
+        chunk = 16*1024
         # Prepare request
         sendheaders = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) \
@@ -89,6 +89,7 @@ class DownloadUrl(object):
         print("done!")
 
     async def downloadfrag(self, start, end, num):
+        # Get fragment name and check if it already exists
         fname = self.path + self.title + ".frag" + str(num)
         self.fragsize[num] = end - start + 1
         if os.access(fname, os.F_OK):
@@ -103,6 +104,7 @@ class DownloadUrl(object):
                           (Macintosh; Intel Mac OS X 10_9_3) \
                           AppleWebKit/537.36 (KHTML, like Gecko) \
                           Chrome/35.0.1916.47 Safari/537.36'}
+        # Download fragment
         async with aiohttp.ClientSession() as session:
             async with session.get(self.url, headers=sendheaders) as resp:
                 print("starting download for frag %d\n" % (num))
@@ -118,6 +120,7 @@ class DownloadUrl(object):
                 print("finished download for frag %d\n" % (num))
 
     def setdefaultfraglist(self):
+        # Create a fragment list, populated with fragment number and size
         assert (int(self.length) > 0), "Your download file kinda sucks"
         assert (self.frags > 1), "Alri8 you're an idiot. :p"
         print("Frags : %d" % self.frags)
@@ -127,9 +130,9 @@ class DownloadUrl(object):
             self.fraglist.append(
                 (self.fraglist[-1][1]+1,
                  int((self.length-1)*(float(i+1)/self.frags))))
-        print(self.fraglist)
 
     async def downloadallfrags(self):
+        # Download file by dividing it into fragments
         if self.length is None:
             await self.sendhead()
             self.setdefaultfraglist()
@@ -151,6 +154,7 @@ class DownloadUrl(object):
             threadlist = [self.downloadfrag(
                 self.fraglist[i][0], self.fraglist[i][1], i)
                           for i in range(self.frags)]
+            # Asynchronously download each fragment, consolidating the threads
             await asyncio.gather(*threadlist)
             print()
             print("done downloading")

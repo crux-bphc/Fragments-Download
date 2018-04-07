@@ -8,7 +8,7 @@ class YtVideo(object):
         self.baseurl = url
         self.path = path
         self.frags = 8
-        self.streamnumber = None   # None will default to best available
+        self.streamnumber = None
         try:
             self.obj = pafy.new(self.baseurl)
         except:
@@ -32,12 +32,14 @@ class YtVideo(object):
         self.frags = frags
 
     async def download(self, music=False):
+        # Download based on preferred file format
         if self.streamnumber:
             downlink = self.obj.allstreams[self.streamnumber]
             downloader = DownloadUrl(
                 downlink.url, self.path,
                 downlink.title + "." + downlink.extension)
         else:
+            # Default to best available quality if format is not specified
             downlink = self.obj.getbest()
             if music:
                 downlink = self.obj.getbestaudio()
@@ -54,4 +56,5 @@ class YtVideo(object):
         await downloader.downloadallfrags()
 
     def sendstreams(self):
+        # Return available file formats
         return self.obj.allstreams

@@ -29,6 +29,7 @@ class AppInterface(QWidget):
             self.b1.close()
         except:
             pass
+        # Creates initial UI screen
         self.l1 = QLabel("Enter the download URL here")
         self.l2 = QLabel("Select the number of fragments")
         self.t1 = QLineEdit()
@@ -40,7 +41,9 @@ class AppInterface(QWidget):
         self.combo = QComboBox()
         for i in range(2, 33):
             self.combo.addItem(str(i))
+        # Bind ComboBox to detect changes in current value
         self.combo.currentIndexChanged.connect(self.changed_selection)
+        # Default number of fragments is 8
         self.combo.setCurrentIndex(6)
         self.box.addWidget(self.l1)
         self.box.addWidget(self.t1)
@@ -52,6 +55,7 @@ class AppInterface(QWidget):
         self.setLayout(self.box)
 
     def select_path(self):
+        # Select destination folder for download
         path_select = QFileDialog()
         path_select.setFileMode(QFileDialog.Directory)
         file_path = None
@@ -68,6 +72,12 @@ class AppInterface(QWidget):
     def predownload(self):
         if len(self.t1.text()) > 1:
             self.url = self.t1.text()
+            """Check if the URL leads to a Youtube video
+
+            A Youtube video requires an intermediate step before it can
+            be downloaded, and therefore we must check if the URL leads
+            to a video, playlist, or if it is any other file.
+            """
             if "youtube" in self.url or "youtu.be" in self.url:
                 self.isTube = True
                 self.l1.close()
@@ -108,6 +118,7 @@ class AppInterface(QWidget):
         self.downloader.setstream(i)
 
     def youtube_ui(self):
+        # Select the preferred file type for downloading
         self.label = QLabel("Select your preferred file type")
         self.cbox = QComboBox()
         self.downloader = YtVideo(self.url, self.path)
@@ -135,7 +146,7 @@ class AppInterface(QWidget):
         self.box.addWidget(self.b1)
         self.downloader.setfrags(self.frags)
         try:
-            if self.isTube is true:
+            if self.isTube is True:
                 event = asyncio.get_event_loop()
                 event.run_until_complete(self.downloader.download())
             else:
