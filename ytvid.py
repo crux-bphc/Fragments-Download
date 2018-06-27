@@ -1,38 +1,60 @@
 import pafy
+import asyncio
 from downloaderOOP import *
-class ytvideo(object):
-    def __init__(self,url):
-        self.baseurl=url
-        self.streamNumber=None   ## None will default to best available ##
+
+
+class YtVideo(object):
+    def __init__(self, url, path):
+        self.baseurl = url
+        self.path = path
+        self.frags = 8
+        self.streamnumber = None
         try:
-            self.obj=pafy.new(self.baseurl)
+            self.obj = pafy.new(self.baseurl)
         except:
-            print("Error getting downloadable urls.Check your url and internet connection")
+            print(
+                "Error getting urls.Check your url and internet connection")
             exit(1)
-        self.title=self.obj.title+"."+self.obj.getbest().extension
+        self.title = self.obj.title + "." + self.obj.getbest().extension
         print(self.title)
-        
+
     def __str__(self):
         print(self.obj)
 
-    def printStreams(self):
+    def printstreams(self):
         for i in range(len(self.obj.allstreams)):
-            print("%d "%(i)+str(self.obj.allstreams[i]))
+            print("%d " % (i) + str(self.obj.allstreams[i]))
 
-    def setStream(self,streamNumber):
-        self.streamNumber=streamNumber
+    def setstream(self, streamNumber):
+        self.streamnumber = streamNumber
 
-    def download(self,music=False):
-        if self.streamNumber:
-            downurl=self.obj.allstreams[self.streamNumber].url
+    def setfrags(self, frags):
+        self.frags = frags
+
+    async def download(self, music=False):
+        # Download based on preferred file format
+        if self.streamnumber:
+            downlink = self.obj.allstreams[self.streamnumber]
+            downloader = DownloadUrl(
+                downlink.url, self.path,
+                downlink.title + "." + downlink.extension)
         else:
-            downstream=self.obj.getbest()
+            # Default to best available quality if format is not specified
+            downlink = self.obj.getbest()
             if music:
-                downstream=self.obj.getbestaudio()
-                download=downloadUrl(downstream.url,downstream.title+"."+downstream.extension)
+                downlink = self.obj.getbestaudio()
+                downloader = DownloadUrl(
+                    downlink.url, self.path,
+                    downlink.title + "." + downlink.extension)
             else:
-                download=downloadUrl(downstream.url,downstream.title+"."+downstream.extension)
-        download.sendHead()
-        download.setDefaultFraglist()
-        download.downloadAllFrags()
-  
+                downloader = DownloadUrl(
+                    downlink.url, self.path,
+                    downlink.title + "." + downlink.extension)
+        downloader.setfrags(self.frags)
+        await downloader.sendhead()
+        downloader.setdefaultfraglist()
+        await downloader.downloadallfrags()
+
+    def sendstreams(self):
+        # Return available file formats
+        return self.obj.allstreams
